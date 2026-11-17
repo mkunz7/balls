@@ -63,5 +63,6 @@ For CLI details, run `python3 scripts/balls-db.py --help`.
 - [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness)
 - [evilsocket/audit](https://github.com/evilsocket/audit)
 - [Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter/tree/main)
+- [Mythos Preview](https://www.anthropic.com/research/mythos-preview)
 - [CodeGraph](https://github.com/colbymchenry/codegraph)
 - [Codex subagents and project-scoped agents](https://developers.openai.com/codex/subagents)
