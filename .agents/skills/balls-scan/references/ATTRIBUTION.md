@@ -1,0 +1,5 @@
+# External reference attribution
+
+BALLS's targeted review checklists were informed by ideas in [Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter), by ElementalSouls. In particular, BALLS adapts the upstream project's emphasis on vulnerability-class-specific checklists, endpoint-by-endpoint coverage, observable success criteria, and explicit false-positive gates for authentication abuse, XSS, CSRF, authorization bypass, business-logic workflows, source exposure, dependency evidence, and exceptional input handling.
+
+BALLS rewrites and scopes these ideas for repository-only static analysis with Codex, CodeGraph, candidate verification, and source-as-provided configuration assessment. No upstream skill file is copied verbatim. The upstream repository identifies its skill content as CC BY 4.0; see its [content license](https://github.com/elementalsouls/Claude-BugHunter/blob/main/LICENSE-CONTENT) and [credits](https://github.com/elementalsouls/Claude-BugHunter/blob/main/docs/credits.md).
