@@ -1,6 +1,6 @@
 # BALLS
 
-**Better Agentic Large Language Scanner** is a Codex-native, local-first source vulnerability audit workflow inspired by Cloudflare's security audit skill and vulnerability harness. It replaces Claude Code agent definitions with Codex skills and native subagents, and builds repository knowledge with CodeGraph's locally indexed symbol/call graph.
+**Better Agentic Large Language Scanner** is a Codex-native, local-first source vulnerability audit workflow inspired by Cloudflare's security audit skill, vulnerability harness, and anthropics original project glasswing blog. It replaces Claude Code agent definitions with Codex skills and native subagents, and builds repository knowledge with CodeGraph's locally indexed symbol/call graph.
 
 ### Why BALLS?
 
@@ -10,6 +10,13 @@ Agentic code analysis keeps a lot of balls in the air: component reviews, focuse
 
 BALLS uses the Codex session you are already signed into. It does not call the OpenAI API and does not require API billing or an API key. Open and trust the `BALLS` folder as the Codex project to load its project-scoped settings. Configuration defaults the coordinator and subagents to `gpt-6-luna`, with up to 12 concurrent subagent threads. Full scans launch independent work together and refill slots as tasks finish; routine verification uses medium reasoning, while high-risk or contested findings use a high-reasoning verifier. Codex's own model and reasoning availability are controlled by your account and client.
 
+## How to Use
+
+1. Pay for a $20 chatgpt subscription.
+2. Signup for chatgpt.com/cyber (you might be able to get by without it for a bit)
+3. Download and install the chatgpt app
+4. Prompt chatgpt to install this app and use it to scan your code repo
+   
 ## Setup
 
 1. Open the `BALLS` folder as the Codex workspace (or copy `.agents/skills/balls-scan` and `.codex/` into a project you trust).
@@ -27,6 +34,8 @@ The skill initializes CodeGraph for the target if needed, maps its architecture,
 The audit reference library contains vulnerability-category and workflow guides, indexed in `.agents/skills/balls-scan/references/README.md`. The scan records each candidate from initial hypothesis through final disposition; `balls-quick-scan` supports bounded triage.
 
 ## Adding a vulnerability category
+
+Just ask your AI to add some based on skill files you find online or types you want. 
 
 Category guides are the focused security skills that BALLS hunters load for a scan. To add one:
 
