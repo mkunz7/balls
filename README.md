@@ -16,6 +16,10 @@ BALLS uses the Codex session you are already signed into. It does not call the O
 2. Signup for chatgpt.com/cyber (you might be able to get by without it for a bit)
 3. Download and install the chatgpt app
 4. Prompt chatgpt to install this app and use it to scan your code repo
+
+Don't like chatgpt? No worries, point your LLM choice to this repo and ask it to port it to whatever you use ie claude code, copilot, or something else. 
+
+Didn't get chatgpt cyber verification right away? Perhaps try an abliterated model?
    
 ## Setup
 
