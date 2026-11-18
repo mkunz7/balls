@@ -739,7 +739,7 @@ def _methodology(coverage, architecture):
             category_work, initial_groups,
             hunters or execution.get("categoryHunterAssignments", "not recorded"), len((coverage or {}).get("units", []))),
         "| Independent verification | %s | %s verifier assignments. |" % (verification_work, verifier_count),
-        "| Model execution | Codex-native reviewers and hunters used the signed-in session. | Direct model API calls: %s; observed concurrency: %s of configured %s. |" % (
+        "| Model execution | Antigravity reviewers, hunters, and verifiers used the active session. | Direct model API calls: %s; observed concurrency: %s of configured %s. |" % (
             execution.get("directModelApiCalls", "not recorded"), execution.get("maxObservedConcurrentSubagents", "not recorded"),
             execution.get("configuredMaxConcurrentSubagents", "not recorded")),
         "| Report generation | Findings, IDs, counts, source excerpts, indexes, diagrams, and appendices were assembled from scan artifacts. | Deterministic SQLite-backed renderer. |",
@@ -825,7 +825,7 @@ def _comparison_section(comparison):
 
 
 def _narrative_block(narrative, key, fallback):
-    """Read a string or paragraph array from an optional Codex-authored narrative."""
+    """Read a string or paragraph array from an optional coordinator-authored narrative."""
     value = (narrative or {}).get(key)
     if isinstance(value, list):
         value = "\n\n".join(part.strip() for part in value if isinstance(part, str) and part.strip())

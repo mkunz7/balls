@@ -1,0 +1,13 @@
+{
+  "name": "balls",
+  "displayName": "BALLS Security Scanner",
+  "version": "1.0.0",
+  "description": "Better Agentic Large Language Scanner — local-first source code vulnerability audit workflow for Antigravity using parallel subagents, CodeGraph, and a SQLite evidence ledger.",
+  "logo": "assets/logo.svg",
+  "repository": "https://github.com/mkunz7/balls",
+  "suggestedPrompts": [
+    "Use balls-scan to run a full security audit on /path/to/repository",
+    "Use balls-quick-scan to triage high-impact vulnerabilities in /path/to/repository",
+    "Resume the latest BALLS security scan in /path/to/repository"
+  ]
+}

@@ -1,4 +1,4 @@
-<!-- Adapted audit reference. Apply its vulnerability-specific checks through the Codex-native BALLS workflow and evidence rules. -->
+<!-- Adapted audit reference. Apply its vulnerability-specific checks through the Antigravity BALLS workflow and evidence rules. -->
 
 # Authorization Vulnerability Detection Skill
 

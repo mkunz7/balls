@@ -1,6 +1,6 @@
 # BALLS audit reference catalog
 
-The scan skill loads these references on demand. The category guides retain the detailed vulnerability patterns; workflow guides retain reconnaissance, hunting, verification, reporting, chain analysis, fast-scan, and resumability practices. All execution uses Codex-native subagents, CodeGraph, and the BALLS SQLite CLI.
+The scan skill loads these references on demand. The category guides retain the detailed vulnerability patterns; workflow guides retain reconnaissance, hunting, verification, reporting, chain analysis, fast-scan, and resumability practices. All execution uses Antigravity subagents, CodeGraph, and the BALLS SQLite CLI.
 
 ## Vulnerability categories
 

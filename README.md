@@ -1,81 +1,93 @@
-# BALLS
+# BALLS (Antigravity Edition)
 
-**Better Agentic Large Language Scanner** is a Codex-native, local-first source vulnerability audit workflow inspired by Cloudflare's security audit skill, vulnerability harness, and anthropics original project glasswing blog. It replaces Claude Code agent definitions with Codex skills and native subagents, and builds repository knowledge with CodeGraph's locally indexed symbol/call graph.
+**Better Agentic Large Language Scanner** is an Antigravity-native, local-first source vulnerability audit workflow inspired by Cloudflare's security audit skill, vulnerability harness, and Anthropic's Project Glasswing blog. This fork ports BALLS from Codex to **Google Antigravity**, pairing Antigravity's workspace skills, bundled subagents, and reactive parallel orchestration with CodeGraph's locally indexed symbol/call graph and a deterministic SQLite evidence ledger.
 
 ### Why BALLS?
 
-Agentic code analysis keeps a lot of balls in the air: component reviews, focused hunts, candidate tracking, independent verification, and report writing all need to stay coordinated. BALLS is a reminder to keep those threads moving without dropping the evidence.
+Agentic code analysis keeps a lot of balls in the air: component reviews, focused hunts, candidate tracking, independent verification, and report writing all need to stay coordinated. BALLS keeps those threads moving without dropping the evidence.
 
 ![Three colorful balls following a juggling arc](assets/balls-juggling.png)
 
-BALLS uses the Codex session you are already signed into. It does not call the OpenAI API and does not require API billing or an API key. Open and trust the `BALLS` folder as the Codex project to load its project-scoped settings. Configuration defaults the coordinator and subagents to `gpt-6-luna`, with up to 12 concurrent subagent threads. Full scans launch independent work together and refill slots as tasks finish; routine verification uses medium reasoning, while high-risk or contested findings use a high-reasoning verifier. Codex's own model and reasoning availability are controlled by your account and client.
+BALLS runs entirely through the Antigravity session you are already signed into — it never calls an external LLM API directly and never asks for an API key. Opening this repository as your Antigravity workspace automatically loads its project rules (`AGENTS.md`), audit skills (`.agents/skills/`), and custom read-only security subagents (`.agents/plugins/balls/agents/`):
 
-## How to Use
+- **High-fan-out exploration & hunting (`Model: "flash"`)**: `balls-reviewer`, `balls-hunter`, and `balls-coverage-critic` fan out across components and vulnerability categories in parallel.
+- **Skeptical verification (`Model: "pro"`)**: `balls-verifier` and `balls-verifier-deep` independently attempt to disprove every candidate against actual source code and exploit-chain pivots.
 
-1. Pay for a $20 chatgpt subscription.
-2. Signup for chatgpt.com/cyber (you might be able to get by without it for a bit)
-3. Download and install the chatgpt app
-4. Prompt chatgpt to install this app and use it to scan your code repo
-
-Don't like chatgpt? No worries, point your LLM choice to this repo and ask it to port it to whatever you use ie claude code, copilot, or something else. 
-
-Didn't get chatgpt cyber verification right away? Perhaps try an abliterated model?
-   
 ## Setup
 
-1. Open the `BALLS` folder as the Codex workspace (or copy `.agents/skills/balls-scan` and `.codex/` into a project you trust).
-2. Install the scanner-pinned CodeGraph CLI locally:
+1. Open the `balls-antigravity` folder as your workspace in Google Antigravity (IDE, App, or `agy` CLI).
+2. Install the scanner-pinned CodeGraph CLI locally inside `.tools/` (gitignored):
 
    ```bash
    npm install --prefix .tools/codegraph --no-audit --no-fund @colbymchenry/codegraph@1.6.2
    ```
 
-   The `.tools/` directory is ignored by Git. BALLS agents call `scripts/codegraph-agent.sh`, which resolves the local binary without relying on a child session inheriting your shell `PATH`. The CLI works without a CodeGraph MCP connection.
-3. Scan a repository with a request such as: `Use the balls-scan skill to audit /path/to/repository`.
+   BALLS subagents invoke `scripts/codegraph-agent.sh` by absolute path so child sessions resolve the local CodeGraph binary without relying on inherited `PATH` or an MCP server.
+3. Run a scan by prompting Antigravity:
+   - **Full audit:** `Use balls-scan to audit /path/to/repository`
+   - **Rapid triage:** `Use balls-quick-scan to triage /path/to/repository`
+   - **Long unattended audits:** Pair with `/goal` so Antigravity drives reconnaissance, parallel hunting, coverage critique, verification, and reporting to completion.
 
-The skill initializes CodeGraph for the target if needed, maps its architecture, and tracks coverage as explicit component-by-category units. Reviewers stay scoped to one component; category hunters work bounded related units within that component. It independently verifies each candidate and writes artifacts under `<target>/.balls/scans/<scan-id>/`. The target source is not edited. The optional `.codegraph/` index and `.balls/` scan output are local generated artifacts.
+The coordinator initializes CodeGraph for the target if needed, maps its architecture, and tracks coverage as explicit `component::category` units. Reviewers stay scoped to one component; category hunters work bounded related units within that component. All subagents have read-only file access (`[read_file, run_command, manage_task]`) and return structured evidence to the coordinator, which writes artifacts under `<target>/.balls/scans/<scan-id>/`. Target source files are never modified or executed.
 
-The audit reference library contains vulnerability-category and workflow guides, indexed in `.agents/skills/balls-scan/references/README.md`. The scan records each candidate from initial hypothesis through final disposition; `balls-quick-scan` supports bounded triage.
+## Antigravity Architecture
 
-## Adding a vulnerability category
+```text
+balls-antigravity/
+├── AGENTS.md                           # Workspace rules & Flash/Pro model tier policy
+├── .agents/
+│   ├── plugins/balls/
+│   │   ├── plugin.json                 # Workspace plugin manifest & starter prompts
+│   │   ├── assets/logo.svg             # Plugin card icon
+│   │   └── agents/                     # Read-only Antigravity subagents
+│   │       ├── balls-reviewer.md       # Component mapper (flash)
+│   │       ├── balls-hunter.md         # Category vulnerability hunter (flash)
+│   │       ├── balls-coverage-critic.md# Coverage & ledger auditor (flash)
+│   │       ├── balls-verifier.md       # Skeptical verifier (pro)
+│   │       └── balls-verifier-deep.md  # High-risk / chain verifier (pro)
+│   └── skills/
+│       ├── balls-scan/                 # Full audit skill + 24 category & workflow guides
+│       └── balls-quick-scan/           # Bounded triage skill
+└── scripts/
+    ├── balls-db.py                     # Concurrent-safe SQLite ledger & report renderer
+    ├── balls-candidates.py             # Complete candidate hypothesis ledger CLI
+    └── codegraph-agent.sh              # Local CodeGraph wrapper for subagents
+```
 
-Just ask your AI to add some based on skill files you find online or types you want. 
+## Adding a Vulnerability Category
 
-Category guides are the focused security skills that BALLS hunters load for a scan. To add one:
+Category guides are the focused security references that BALLS hunters load on demand:
 
-1. Create `.agents/skills/balls-scan/references/categories/<category>.md`, using a short kebab-case name that matches the category identifier.
-2. Make the guide actionable: describe the weakness and relevant sources/sinks, give checks for the supported language or framework, explain common defenses and false positives, and require evidence for attacker reachability and impact. Include concise remediation guidance and authoritative references where useful.
-3. Add a link to the new guide in `.agents/skills/balls-scan/references/README.md`. If the category is new to the scanner’s required coverage, update the category list in `.agents/skills/balls-scan/SKILL.md` as well.
-4. During a scan, add a component-by-category unit to `coverage.json` (for example, `web-app::<category>`), assign it to a hunter, and point the prompt to the relevant guide sections. The hunter should trace the source to the sensitive operation with CodeGraph, inspect the source directly, and return either an evidence-backed candidate or an explicit no-finding result. Record every candidate before verification.
-
-These Markdown guides are reference material loaded by the `balls-scan` skill; they do not need separate Codex skill frontmatter or their own skill directory.
+1. Create `.agents/skills/balls-scan/references/categories/<category>.md`, using a short kebab-case name matching the category identifier.
+2. Describe the weakness and relevant sources/sinks, checks for supported languages/frameworks, common defenses and false positives, reachability/impact evidence requirements, and concise remediation guidance.
+3. Add a link in `.agents/skills/balls-scan/references/README.md` (and add to the default category list in `.agents/skills/balls-scan/SKILL.md` if required on every full scan).
+4. During a scan, assign `<component>::<category>` units in `coverage.json` to `balls-hunter` subagents with the relevant guide sections.
 
 ## Pipeline
 
-1. **Reconnaissance and coverage:** map project boundaries and build a coverage ledger.
-2. **Review and hunt:** fan out Codex subagents by component and vulnerability class, using CodeGraph to trace source, calls, and trust boundaries.
-3. **Independent verification:** a fresh verifier tries to disprove each candidate.
-4. **Candidate ledger:** every hypothesis is retained with a pending, verified, needs-validation, rejected, or merged disposition.
-5. **Evidence ledger:** concurrent-safe SQLite stores components, verifier decisions, and promoted findings.
-6. **Deterministic report:** IDs and counts are assembled from the DB; source excerpts are read from disk with obvious hard-coded credential values redacted.
+1. **Reconnaissance and coverage:** map project boundaries with CodeGraph and build an explicit `component::category` coverage ledger.
+2. **Parallel review and hunt:** fan out `balls-reviewer` and `balls-hunter` (`flash`) subagents concurrently via `invoke_subagent` (with reactive wakeup slot refilling) or `run_workflow`.
+3. **Candidate ledger:** retain every hypothesis in `candidates.json` (`PENDING` → `CONFIRMED`, `LIKELY`, `POSSIBLE`, `NEEDS_VALIDATION`, `REJECTED`, or `MERGED`) while `balls-coverage-critic` checks for gaps.
+4. **Independent verification:** fresh `balls-verifier` and `balls-verifier-deep` (`pro`) subagents attempt to disprove each deduplicated candidate from source.
+5. **Evidence ledger:** concurrent-safe SQLite (`scan.db`) stores components, raw findings, verifier council verdicts, and cross-component exploit chains.
+6. **Deterministic report:** IDs, counts, indexes, diagrams, and secret-redacted source excerpts are rendered deterministically alongside `report-narrative.json`.
 
-## Output
+## Output (`<target>/.balls/scans/<scan-id>/`)
 
-- `BALLS-REPORT.md` — executive summary, methodology, scope, architecture diagram, component/category coverage, severity/component/CWE indexes, evidence and data-flow diagrams, chains, unresolved leads, remediation priorities, and appendices. Each finding includes vulnerable source, safe reproduction steps (with bounded commands when supported), an example fixed implementation, and remediation guidance.
-- `BALLS-REPORT.json` — machine-readable report with the same scan metadata and candidates
-- `report-narrative.json` — evidence-led executive and section summaries saved with the scan for review
-- `scan.db` — evidence ledger
-- `coverage.json` / `candidates.json` — scan coverage and complete candidate audit trail, including rejected, merged, likely, and unresolved leads
-- `reference-claim-matrix.json` — optional claim-by-claim comparison against a supplied prior assessment
-
-For CLI details, run `python3 scripts/balls-db.py --help`.
+- `BALLS-REPORT.md` — executive summary, methodology, scope, Mermaid architecture & data-flow diagrams, component/category coverage, severity/component/CWE indexes, exploit chains, safe reproduction steps, minimal fixed-code examples, and appendices.
+- `BALLS-REPORT.json` — machine-readable report with full metadata and candidate dispositions.
+- `report-narrative.json` — evidence-led executive and section summaries grounded strictly in verified artifacts.
+- `scan.db` — SQLite evidence ledger (`python3 scripts/balls-db.py --help`).
+- `coverage.json` / `candidates.json` — complete audit trail of coverage units and candidate hypotheses.
+- `reference-claim-matrix.json` — optional claim-by-claim comparison against a prior assessment.
 
 ## References
 
+- [Upstream BALLS (Codex)](https://github.com/mkunz7/balls)
+- [Google Antigravity Documentation](https://antigravity.google/docs)
 - [Cloudflare Security Audit Skill](https://github.com/cloudflare/security-audit-skill)
 - [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness)
 - [evilsocket/audit](https://github.com/evilsocket/audit)
 - [Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter/tree/main)
 - [Mythos Preview](https://www.anthropic.com/research/mythos-preview)
 - [CodeGraph](https://github.com/colbymchenry/codegraph)
-- [Codex subagents and project-scoped agents](https://developers.openai.com/codex/subagents)

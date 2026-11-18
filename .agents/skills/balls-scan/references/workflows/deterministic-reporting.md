@@ -1,6 +1,6 @@
 # Deterministic reporting
 
-Finding records, IDs, counts, indexes, coverage tables, and source excerpts are assembled deterministically from verified SQLite rows and scan artifacts. The coordinator may add a Codex-authored `report-narrative.json` for section summaries; it must be grounded in the same final artifacts and is included in the report JSON so the prose can be reviewed and reproduced. The renderer does not call a model or API. Obvious credential assignments are redacted from source excerpts.
+Finding records, IDs, counts, indexes, coverage tables, and source excerpts are assembled deterministically from verified SQLite rows and scan artifacts. The coordinator may add a coordinator-authored `report-narrative.json` for section summaries; it must be grounded in the same final artifacts and is included in the report JSON so the prose can be reviewed and reproduced. The renderer does not call a model or API. Obvious credential assignments are redacted from source excerpts.
 
 Use the scan database CLI:
 

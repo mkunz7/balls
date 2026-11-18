@@ -1,6 +1,6 @@
 # Coverage critic
 
-Start this pass once the initial component reviews and category hunters finish, using a fresh Codex subagent that did not author the primary coverage map or hunting assignments. To reduce idle time, verification of already collected candidates may run concurrently. Finish the critic before closing the scan; launch its follow-up hunters in free slots and verify their returned candidates afterward.
+Start this pass once the initial component reviews and category hunters finish, using a fresh `balls-coverage-critic` subagent (`Model: "flash"`) that did not author the primary coverage map or hunting assignments. To reduce idle time, verification of already collected candidates may run concurrently. Finish the critic before closing the scan; launch its follow-up hunters in free slots and verify their returned candidates afterward.
 
 ## Inputs
 
