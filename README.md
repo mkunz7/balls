@@ -79,3 +79,5 @@ For CLI details, run `python3 scripts/balls-db.py --help`.
 - [Mythos Preview](https://www.anthropic.com/research/mythos-preview)
 - [CodeGraph](https://github.com/colbymchenry/codegraph)
 - [Codex subagents and project-scoped agents](https://developers.openai.com/codex/subagents)
+- [Claude Security](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security)
+- [OpenAI Security](https://github.com/openai/codex-security)
